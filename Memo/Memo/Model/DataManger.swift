@@ -16,6 +16,7 @@ class DataManger {
     private init() {
         
     }
+    var list = [MemoEntity]()
     
     var mainContext: NSManagedObjectContext {
         return persistentContainer.viewContext
@@ -45,6 +46,19 @@ class DataManger {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        }
+    }
+    
+    func fetch() {
+        let request = MemoEntity.fetchRequest()
+        
+        let sortByDateDesc = NSSortDescriptor(key: "insertDate", ascending: false)
+        request.sortDescriptors = [sortByDateDesc]
+        
+        do {
+            list = try mainContext.fetch(request)
+        } catch {
+            print(error)
         }
     }
 }
