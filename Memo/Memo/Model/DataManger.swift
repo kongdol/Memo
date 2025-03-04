@@ -24,7 +24,7 @@ class DataManger {
     
     
     // MARK: - Core Data stack
-
+    
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Memo")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -34,9 +34,9 @@ class DataManger {
         })
         return container
     }()
-
+    
     // MARK: - Core Data Saving support
-
+    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -48,6 +48,64 @@ class DataManger {
             }
         }
     }
+    
+    func insertDummyData() {
+#if DEBUG
+        // 저장되어있는게 있으면 바로리턴
+        let countRequest = MemoEntity.fetchRequest()
+        
+        do {
+            let count = try mainContext.count(for: countRequest)
+            if count > 0 {
+                return
+            }
+            
+        } catch {
+            print(error)
+        }
+        
+        guard let path = Bundle.main.path(forResource: "lipsum", ofType: "txt") else {
+            return
+        }
+        
+        do {
+            // 파일에 포함된 내용 문자열로 리턴
+            let source = try String(contentsOfFile: path)
+            
+            let sentences = source.components(separatedBy: .newlines).filter {
+                // 비어있지 않는 문자열만 필터링
+                $0.trimmingCharacters(in: .whitespacesAndNewlines).count > 0
+            }
+            // 배치insert
+            var dataList = [[String: Any]]()
+            
+            for sentence in sentences {
+//                let memo = MemoEntity(context: mainContext)
+//                memo.content = sentence
+//                // TimeInterval타입으로 전달해야되는데 이게 double타입과 같아서
+//                memo.insertDate = Date(timeIntervalSinceNow: Double.random(in: 0 ... 3600 * 24 * 30) * -1)
+                
+                dataList.append([
+                    "content": sentence,
+                    "insertDate": Date(timeIntervalSinceNow: Double.random(in: 0 ... 3600 * 24 * 30) * -1)
+                ])
+            }
+            
+            let insertRequest = NSBatchInsertRequest(entityName: "Memo", objects: dataList)
+            
+            if let result = try mainContext.execute(insertRequest) as? NSBatchInsertResult, let succeeded = result.result as? Bool {
+                if succeeded {
+                    print("Batch Insert 성공")
+                } else {
+                    print("Batch Insert 실패")
+                }
+            }
+        } catch {
+            print(error)
+        }
+#endif
+    }
+    
     
     func fetch() {
         let request = MemoEntity.fetchRequest()
