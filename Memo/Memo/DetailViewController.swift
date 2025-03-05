@@ -13,6 +13,12 @@ class DetailViewController: UIViewController {
     
     var memo: MemoEntity?
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination.children.first as? ComposeViewController {
+            vc.editTarget = memo
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

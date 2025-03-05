@@ -32,10 +32,20 @@ class ListViewController: UIViewController {
             self.memoTableView.insertRows(at: [indexPath], with: .automatic)
         }
         
+        NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { noti in
+            if let memo = noti.userInfo?["memo"] as? MemoEntity,
+               let index = DataManger.shared.list.firstIndex(of: memo) {
+                let indexPath = IndexPath(row: index, section: 0)
+                self.memoTableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+            
+        }
+        
     }
-
-
 }
+
+
+
 
 extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

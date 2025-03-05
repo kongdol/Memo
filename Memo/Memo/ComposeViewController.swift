@@ -9,10 +9,13 @@ import UIKit
 
 extension Notification.Name {
     static let memoDidInsert = Notification.Name("memoDidInsert")
+    static let memoDidUpdate = Notification.Name("memoDidUpdate")
 }
 
 class ComposeViewController: UIViewController {
 
+    var editTarget: MemoEntity?
+    
     @IBOutlet weak var contentTextView: UITextView!
     
     
@@ -26,9 +29,14 @@ class ComposeViewController: UIViewController {
             return
         }
         
-        DataManger.shared.insert(memo: text)
-        NotificationCenter.default.post(name: .memoDidInsert, object: nil)
-        
+        if let editTarget {
+            DataManger.shared.update(entity: editTarget, with: text)
+            // 몇번째 셀을 수정하는지 알아야되서 userInfo넣어줌
+            NotificationCenter.default.post(name: .memoDidUpdate, object: nil, userInfo: ["memo": editTarget])
+        } else {
+            DataManger.shared.insert(memo: text)
+            NotificationCenter.default.post(name: .memoDidInsert, object: nil)
+        }
         dismiss(animated: true)
     }
     
@@ -37,8 +45,13 @@ class ComposeViewController: UIViewController {
 
         // 바로 입력할수있게 키보드 표시
         contentTextView.becomeFirstResponder()
-        navigationItem.title = "새 메모"
-       
+        
+        if let editTarget {
+            navigationItem.title = "편집"
+            contentTextView.text = editTarget.content
+        } else {
+            navigationItem.title = "새 메모"
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

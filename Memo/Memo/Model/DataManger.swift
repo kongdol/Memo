@@ -130,4 +130,9 @@ class DataManger {
         // fetch()
         list.insert(newMemo, at: 0)
     }
+    
+    func update(entity: MemoEntity, with content: String) {
+        entity.content = content
+        saveContext()
+    }
 }
