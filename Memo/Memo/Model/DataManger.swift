@@ -119,4 +119,14 @@ class DataManger {
             print(error)
         }
     }
+    
+    func insert(memo: String) {
+        let newMemo = MemoEntity(context: mainContext)
+        
+        newMemo.content = memo
+        newMemo.insertDate = .now
+        
+        saveContext()
+        list.insert(newMemo, at: 0)
+    }
 }

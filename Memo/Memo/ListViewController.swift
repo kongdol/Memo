@@ -9,10 +9,20 @@ import UIKit
 
 class ListViewController: UIViewController {
 
+    @IBOutlet weak var memoTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         DataManger.shared.fetch()
+        
+        NotificationCenter.default.addObserver(forName: .memoDidInsert, object: nil, queue: .main) { _ in
+            //self.memoTableView.reloadData()
+           
+            let indexPath = IndexPath(row: 0, section: 0)
+            self.memoTableView.insertRows(at: [indexPath], with: .automatic)
+        }
+        
     }
 
 
