@@ -44,6 +44,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="bR4-3p-TMX" kind="show" id="qIG-tR-Nzd"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -157,6 +160,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rHH-aC-ddp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2240" y="-35"/>
+        </scene>
+        <!--메모보기-->
+        <scene sceneID="zdt-Wr-3J1">
+            <objects>
+                <viewController id="bR4-3p-TMX" customClass="DetailViewController" customModule="Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2fO-4l-yJR">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="U7b-h0-CWw">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="769"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OW2-IW-Koa">
+                                <rect key="frame" x="0.0" y="769" width="393" height="49"/>
+                                <items>
+                                    <barButtonItem title="Item" id="ALb-ni-HuS"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Y9s-Y0-d3B"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="OW2-IW-Koa" firstAttribute="bottom" secondItem="Y9s-Y0-d3B" secondAttribute="bottom" id="DHo-WS-uoD"/>
+                            <constraint firstItem="OW2-IW-Koa" firstAttribute="trailing" secondItem="Y9s-Y0-d3B" secondAttribute="trailing" id="Na0-Ez-fNP"/>
+                            <constraint firstItem="U7b-h0-CWw" firstAttribute="trailing" secondItem="Y9s-Y0-d3B" secondAttribute="trailing" id="fCe-oI-UPg"/>
+                            <constraint firstItem="OW2-IW-Koa" firstAttribute="top" secondItem="U7b-h0-CWw" secondAttribute="bottom" id="n5B-FL-h3P"/>
+                            <constraint firstItem="U7b-h0-CWw" firstAttribute="top" secondItem="2fO-4l-yJR" secondAttribute="top" id="o6Q-UF-5Nu"/>
+                            <constraint firstItem="OW2-IW-Koa" firstAttribute="leading" secondItem="Y9s-Y0-d3B" secondAttribute="leading" id="oca-a3-IUj"/>
+                            <constraint firstItem="U7b-h0-CWw" firstAttribute="leading" secondItem="Y9s-Y0-d3B" secondAttribute="leading" id="q8s-Zn-1dZ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="메모보기" largeTitleDisplayMode="never" id="oyF-q2-1YQ"/>
+                    <connections>
+                        <outlet property="contentTextView" destination="U7b-h0-CWw" id="Zyl-Ac-W4C"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gW7-GM-eQD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2238.9312977099235" y="713.38028169014092"/>
         </scene>
     </scenes>
     <resources>

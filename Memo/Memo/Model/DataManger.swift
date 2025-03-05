@@ -127,6 +127,7 @@ class DataManger {
         newMemo.insertDate = .now
         
         saveContext()
+        // fetch()
         list.insert(newMemo, at: 0)
     }
 }
