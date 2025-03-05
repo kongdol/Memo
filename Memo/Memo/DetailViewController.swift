@@ -25,8 +25,14 @@ class DetailViewController: UIViewController {
         if let memo {
             contentTextView.text = memo.content
         }
+        NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { [weak self]_ in
+            guard let self else { return }
+            self.contentTextView.text = self.memo?.content
+        }
     }
     
-
+    deinit {
+        print(self,#function)
+    }
 
 }

@@ -63,5 +63,8 @@ class ComposeViewController: UIViewController {
         }
     }
 
-   
+    deinit {
+        print(self,#function)
+    }
+    
 }

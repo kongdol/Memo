@@ -8,6 +8,8 @@
 import UIKit
 
 class ListViewController: UIViewController {
+    
+    var reloadTargetIndexPath: IndexPath?
 
     @IBOutlet weak var memoTableView: UITableView!
     
@@ -25,22 +27,33 @@ class ListViewController: UIViewController {
         
         DataManger.shared.fetch()
         
-        NotificationCenter.default.addObserver(forName: .memoDidInsert, object: nil, queue: .main) { _ in
+        NotificationCenter.default.addObserver(forName: .memoDidInsert, object: nil, queue: .main) { [weak self]_ in
+            guard let self else { return }
             //self.memoTableView.reloadData()
            
             let indexPath = IndexPath(row: 0, section: 0)
             self.memoTableView.insertRows(at: [indexPath], with: .automatic)
         }
         
-        NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { noti in
+        NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { [weak self] noti in
+            guard let self else { return }
+            
             if let memo = noti.userInfo?["memo"] as? MemoEntity,
                let index = DataManger.shared.list.firstIndex(of: memo) {
                 let indexPath = IndexPath(row: index, section: 0)
-                self.memoTableView.reloadRows(at: [indexPath], with: .automatic)
+//                self.memoTableView.reloadRows(at: [indexPath], with: .automatic)
+                self.reloadTargetIndexPath = indexPath
             }
-            
         }
+    }
+    // 화면이 호출되기 전에 호출
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
         
+        if let reloadTargetIndexPath {
+            memoTableView.reloadRows(at: [reloadTargetIndexPath], with: .automatic)
+            self.reloadTargetIndexPath = nil
+        }
     }
 }
 
