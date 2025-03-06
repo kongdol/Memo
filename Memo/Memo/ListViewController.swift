@@ -75,6 +75,14 @@ extension ListViewController: UITableViewDataSource {
         return cell
     }
     
+    // 테이블뷰에서 스와이프 to Delete가 활성화 됨, 버튼탭하면 호출됨
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            DataManger.shared.delete(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
     
 }
 

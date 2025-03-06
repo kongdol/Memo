@@ -135,4 +135,18 @@ class DataManger {
         entity.content = content
         saveContext()
     }
+    
+    func delete(entity: MemoEntity) {
+        mainContext.delete(entity)
+        saveContext()
+        
+        if let index = list.firstIndex(of: entity) {
+            list.remove(at: index)
+        }
+    }
+    
+    func delete(at index: Int) {
+        let target = list[index]
+        delete(entity: target)
+    }
 }

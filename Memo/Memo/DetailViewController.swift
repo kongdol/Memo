@@ -13,6 +13,24 @@ class DetailViewController: UIViewController {
     
     var memo: MemoEntity?
     
+    
+    @IBAction func deleteMemo(_ sender: Any) {
+        let alert = UIAlertController(title: "삭제확인", message: "메모를 삭제할까요?", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+            guard let memo = self.memo else { return }
+            DataManger.shared.delete(entity: memo)
+            self.navigationController?.popViewController(animated: true)
+        }
+        alert.addAction(okAction)
+        
+        let cancleAction = UIAlertAction(title: "취소", style: .cancel)
+        alert.addAction(cancleAction)
+        
+        present(alert, animated: true)
+    }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination.children.first as? ComposeViewController {
             vc.editTarget = memo
