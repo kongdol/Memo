@@ -136,13 +136,17 @@ class DataManger {
         saveContext()
     }
     
-    func delete(entity: MemoEntity) {
+    
+    @discardableResult // 리턴값 사용하지 않아도 경고표시안되게
+    func delete(entity: MemoEntity) -> Int? {
         mainContext.delete(entity)
         saveContext()
         
         if let index = list.firstIndex(of: entity) {
             list.remove(at: index)
+            return index
         }
+        return nil
     }
     
     func delete(at index: Int) {

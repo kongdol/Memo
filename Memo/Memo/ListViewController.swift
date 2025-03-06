@@ -10,6 +10,7 @@ import UIKit
 class ListViewController: UIViewController {
     
     var reloadTargetIndexPath: IndexPath?
+    var deleteTargetIndexPath: IndexPath?
 
     @IBOutlet weak var memoTableView: UITableView!
     
@@ -45,6 +46,16 @@ class ListViewController: UIViewController {
                 self.reloadTargetIndexPath = indexPath
             }
         }
+        
+        NotificationCenter.default.addObserver(forName: .memoDidDelete, object: nil, queue: .main) { [weak self] noti in
+            guard let self else {return}
+            
+            if let index = noti.userInfo?["index"] as? Int {
+                let indexPath = IndexPath(row: index, section: 0)
+                self.deleteTargetIndexPath = indexPath
+            }
+        }
+        
     }
     // 화면이 호출되기 전에 호출
     override func viewIsAppearing(_ animated: Bool) {
@@ -53,6 +64,11 @@ class ListViewController: UIViewController {
         if let reloadTargetIndexPath {
             memoTableView.reloadRows(at: [reloadTargetIndexPath], with: .automatic)
             self.reloadTargetIndexPath = nil
+        }
+        
+        if let deleteTargetIndexPath {
+            memoTableView.deleteRows(at: [deleteTargetIndexPath], with: .automatic)
+            self.deleteTargetIndexPath = nil
         }
     }
 }
