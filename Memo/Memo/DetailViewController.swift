@@ -18,10 +18,13 @@ class DetailViewController: UIViewController {
     var memo: MemoEntity?
     
     @IBAction func deleteMemo(_ sender: Any) {
+        // 경고창 띄우고 삭제
         let alert = UIAlertController(title: "삭제확인", message: "메모를 삭제할까요?", preferredStyle: .alert)
         
+        // .destructive 타이틀이 빨간색으로 표시
         let okAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             guard let memo = self.memo else { return }
+            
             if let index = DataManger.shared.delete(entity: memo) {
                 NotificationCenter.default.post(name: .memoDidDelete, object: nil, userInfo: ["index": index])
             }

@@ -14,7 +14,9 @@ extension Notification.Name {
 
 class ComposeViewController: UIViewController {
 
+    // 있으면 편집, nil이면 추가
     var editTarget: MemoEntity?
+    var originalContent = ""
     
     @IBOutlet weak var contentTextView: UITextView!
     
@@ -37,6 +39,7 @@ class ComposeViewController: UIViewController {
             DataManger.shared.insert(memo: text)
             NotificationCenter.default.post(name: .memoDidInsert, object: nil)
         }
+        
         dismiss(animated: true)
     }
     
@@ -49,9 +52,13 @@ class ComposeViewController: UIViewController {
         if let editTarget {
             navigationItem.title = "편집"
             contentTextView.text = editTarget.content
+            originalContent = editTarget.content ?? ""
         } else {
             navigationItem.title = "새 메모"
+            contentTextView.text = ""
         }
+        
+        contentTextView.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,4 +74,19 @@ class ComposeViewController: UIViewController {
         print(self,#function)
     }
     
+}
+
+extension ComposeViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        
+        if let _ = editTarget {
+            // 원래내용과 새로운내용 다르면 true (안내려가게)
+            isModalInPresentation = originalContent != textView.text
+        } else {
+            //뷰컨트롤러에 동작을 결정하는 속성(기본값false)
+            isModalInPresentation = !textView.text.isEmpty
+        }
+        
+        
+    }
 }

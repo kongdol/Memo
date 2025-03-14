@@ -106,7 +106,7 @@ class DataManger {
 #endif
     }
     
-    
+    // 코어데이터에 메모데이터를 주세요!라고 요청하는것
     func fetch() {
         let request = MemoEntity.fetchRequest()
         
@@ -132,6 +132,7 @@ class DataManger {
     }
     
     func update(entity: MemoEntity, with content: String) {
+        // 엔티티는 클래스여서 따로 배열을 업데이트 안해도됨, 참조형식이여서
         entity.content = content
         saveContext()
     }

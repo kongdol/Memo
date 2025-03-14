@@ -22,7 +22,7 @@ class ListViewController: UIViewController {
         }
         
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,6 +36,7 @@ class ListViewController: UIViewController {
             self.memoTableView.insertRows(at: [indexPath], with: .automatic)
         }
         
+        // MARK: 메모업데이트 노티피케이션
         NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { [weak self] noti in
             guard let self else { return }
             
@@ -57,11 +58,12 @@ class ListViewController: UIViewController {
         }
         
     }
-    // 화면이 호출되기 전에 호출
+    // 루트뷰가 계층에 추가되고 나서 화면이 표시되기 전에 호출
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         
         if let reloadTargetIndexPath {
+            // 인덱스 저장되어있으면 해당 인덱스페스 릴로드
             memoTableView.reloadRows(at: [reloadTargetIndexPath], with: .automatic)
             self.reloadTargetIndexPath = nil
         }
