@@ -110,7 +110,7 @@ class DataManger {
     func fetch() {
         let request = MemoEntity.fetchRequest()
         
-        let sortByDateDesc = NSSortDescriptor(key: "insertDate", ascending: false)
+        let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
         request.sortDescriptors = [sortByDateDesc]
         
         do {
