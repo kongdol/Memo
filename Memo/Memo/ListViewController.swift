@@ -22,6 +22,13 @@ class ListViewController: UIViewController {
         }
         
     }
+    
+    func sestupSearchBar() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.placeholder = "메모 내용으로 검색해 보세요"
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,9 +80,27 @@ class ListViewController: UIViewController {
             self.deleteTargetIndexPath = nil
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        sestupSearchBar()
+    }
 }
 
-
+extension ListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        defer {
+            memoTableView.reloadData()
+        }
+        
+        guard let keyword = searchController.searchBar.text, keyword.count > 0 else {
+            DataManger.shared.fetch()
+            return
+        }
+        DataManger.shared.fetch(keyword: keyword)
+    }
+}
 
 
 extension ListViewController: UITableViewDataSource {

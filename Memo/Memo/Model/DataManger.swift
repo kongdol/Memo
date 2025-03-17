@@ -107,8 +107,13 @@ class DataManger {
     }
     
     // 코어데이터에 메모데이터를 주세요!라고 요청하는것
-    func fetch() {
+    func fetch(keyword: String? = nil) {
         let request = MemoEntity.fetchRequest()
+        
+        if let keyword {
+            request.predicate = NSPredicate(format: "%K CONTAINS [c] %@", #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
+        }
+        
         
         let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
         request.sortDescriptors = [sortByDateDesc]
