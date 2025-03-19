@@ -28,10 +28,24 @@ class ListViewController: UIViewController {
         navigationItem.searchController = searchController
     }
 
+    @objc func resetCache() {
+        NSFetchedResultsController<MemoEntity>.deleteCache(withName: nil)
+        DataManger.shared.fetch()
+        memoTableView.refreshControl?.endRefreshing()
+        
+    }
+    
+    func setupPullToRefresh() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(resetCache), for: .valueChanged)
+        memoTableView.refreshControl = refreshControl
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         DataManger.shared.fetchedResults.delegate = self
+        setupPullToRefresh()
         
     }
  
