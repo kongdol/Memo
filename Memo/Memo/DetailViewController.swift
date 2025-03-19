@@ -7,9 +7,6 @@
 
 import UIKit
 
-extension Notification.Name {
-    static let memoDidDelete = Notification.Name("memoDidDelete")
-}
 
 class DetailViewController: UIViewController {
 
@@ -25,9 +22,8 @@ class DetailViewController: UIViewController {
         let okAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
             guard let memo = self.memo else { return }
             
-            if let index = DataManger.shared.delete(entity: memo) {
-                NotificationCenter.default.post(name: .memoDidDelete, object: nil, userInfo: ["index": index])
-            }
+            DataManger.shared.delete(entity: memo)
+                
             self.navigationController?.popViewController(animated: true)
         }
         alert.addAction(okAction)
@@ -51,9 +47,9 @@ class DetailViewController: UIViewController {
         if let memo {
             contentTextView.text = memo.content
         }
-        NotificationCenter.default.addObserver(forName: .memoDidUpdate, object: nil, queue: .main) { [weak self]_ in
-            guard let self else { return }
-            self.contentTextView.text = self.memo?.content
+        
+        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: .main) { [weak self]_ in
+            self?.contentTextView.text = self?.memo?.content
         }
     }
     

@@ -14,26 +14,36 @@ class DataManger {
     
     // 클래스밖에서 생성자를 호출 못함
     private init() {
-        
-    }
-    var list = [MemoEntity]()
-    
-    var mainContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
-    }
-    
-    
-    // MARK: - Core Data stack
-    
-    lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "Memo")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
-        return container
-    }()
+        
+        persistentContainer = container
+        mainContext = persistentContainer.viewContext
+        
+        let request = MemoEntity.fetchRequest()
+        let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
+        request.sortDescriptors = [sortByDateDesc]
+        
+        fetchedResults = NSFetchedResultsController(fetchRequest: request, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: "MemoCache")
+        
+        do {
+            try fetchedResults.performFetch()
+        } catch {
+            print(error)
+        }
+    }
+    
+    let fetchedResults: NSFetchedResultsController<MemoEntity>
+    let mainContext: NSManagedObjectContext
+    
+    
+    // MARK: - Core Data stack
+    
+    let persistentContainer: NSPersistentContainer
     
     // MARK: - Core Data Saving support
     
@@ -108,18 +118,16 @@ class DataManger {
     
     // 코어데이터에 메모데이터를 주세요!라고 요청하는것
     func fetch(keyword: String? = nil) {
-        let request = MemoEntity.fetchRequest()
-        
         if let keyword {
-            request.predicate = NSPredicate(format: "%K CONTAINS [c] %@", #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
+            let predicate = NSPredicate(format: "%K CONTAINS [c] %@", #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
+            fetchedResults.fetchRequest.predicate = predicate
+        } else {
+            fetchedResults.fetchRequest.predicate = nil
         }
         
         
-        let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
-        request.sortDescriptors = [sortByDateDesc]
-        
         do {
-            list = try mainContext.fetch(request)
+            try fetchedResults.performFetch()
         } catch {
             print(error)
         }
@@ -132,8 +140,6 @@ class DataManger {
         newMemo.insertDate = .now
         
         saveContext()
-        // fetch()
-        list.insert(newMemo, at: 0)
     }
     
     func update(entity: MemoEntity, with content: String) {
@@ -142,21 +148,13 @@ class DataManger {
         saveContext()
     }
     
-    
-    @discardableResult // 리턴값 사용하지 않아도 경고표시안되게
-    func delete(entity: MemoEntity) -> Int? {
+    func delete(entity: MemoEntity) {
         mainContext.delete(entity)
         saveContext()
-        
-        if let index = list.firstIndex(of: entity) {
-            list.remove(at: index)
-            return index
-        }
-        return nil
     }
     
-    func delete(at index: Int) {
-        let target = list[index]
+    func delete(at indexPath: IndexPath) {
+        let target = fetchedResults.object(at: indexPath)
         delete(entity: target)
     }
 }
