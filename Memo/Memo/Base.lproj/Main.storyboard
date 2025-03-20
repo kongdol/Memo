@@ -6,6 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -64,7 +65,7 @@
                             <constraint firstItem="s3b-bh-F9w" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="zDQ-UV-2UD"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="메모" id="jGa-Wm-P8C">
+                    <navigationItem key="navigationItem" title="메모" largeTitleDisplayMode="never" id="jGa-Wm-P8C">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="BcT-Y2-djs">
                             <connections>
                                 <segue destination="fdX-7O-wLz" kind="presentation" id="8Xd-F4-60w"/>
@@ -137,12 +138,65 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="KiX-uI-KbX"/>
+                        <segue destination="dZm-Sx-E0V" kind="relationship" relationship="rootViewController" id="x6b-BZ-nB4"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KfI-8v-DUQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="130.53435114503816" y="-34.507042253521128"/>
+            <point key="canvasLocation" x="-500" y="-44"/>
+        </scene>
+        <!--그룹-->
+        <scene sceneID="EAG-LE-xGH">
+            <objects>
+                <collectionViewController id="dZm-Sx-E0V" customClass="GruopCollectionViewController" customModule="Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="uWR-I4-KQq">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="62e-WO-upN">
+                            <size key="itemSize" width="312" height="345"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GruopCollectionViewCell" id="brW-K6-L2a" customClass="GruopCollectionViewCell" customModule="Memo" customModuleProvider="target">
+                                <rect key="frame" x="40.666666666666664" y="0.0" width="312" height="345"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="wIG-AF-2xc">
+                                    <rect key="frame" x="0.0" y="0.0" width="312" height="345"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcs-Ni-35Z">
+                                            <rect key="frame" x="30" y="30" width="252" height="21"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="zcs-Ni-35Z" secondAttribute="trailing" constant="30" id="E9c-mE-fqa"/>
+                                        <constraint firstItem="zcs-Ni-35Z" firstAttribute="top" secondItem="wIG-AF-2xc" secondAttribute="top" constant="30" id="HbK-p0-A3a"/>
+                                        <constraint firstItem="zcs-Ni-35Z" firstAttribute="leading" secondItem="wIG-AF-2xc" secondAttribute="leading" constant="30" id="gqq-PK-D5u"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <size key="customSize" width="312" height="345"/>
+                                <connections>
+                                    <outlet property="nameLabel" destination="zcs-Ni-35Z" id="TmX-wg-Rbz"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" id="FuE-Qx-xDA"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="dZm-Sx-E0V" id="T3Q-I4-6od"/>
+                            <outlet property="delegate" destination="dZm-Sx-E0V" id="OTR-tA-6J3"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="그룹" largeTitleDisplayMode="always" id="gwL-Lq-MbZ"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pf0-pj-pn6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="270.99236641221376" y="-35.211267605633807"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NGo-8O-BYJ">
@@ -218,7 +272,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="JR5-j0-pGM"/>
+        <segue reference="8Xd-F4-60w"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="labelColor">
