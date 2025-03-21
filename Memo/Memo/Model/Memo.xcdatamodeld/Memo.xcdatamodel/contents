@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="23F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Gruop" representedClassName="GruopEntity" syncable="YES" codeGenerationType="class">
+    <entity name="Group" representedClassName="GroupEntity" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String"/>
-        <relationship name="memos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Memo" inverseName="gruop" inverseEntity="Memo"/>
+        <relationship name="memos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Memo" inverseName="group" inverseEntity="Memo"/>
     </entity>
     <entity name="Memo" representedClassName="MemoEntity" syncable="YES" codeGenerationType="category">
         <attribute name="content" attributeType="String"/>
         <attribute name="insertDate" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="gruop" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Gruop" inverseName="memos" inverseEntity="Gruop"/>
+        <relationship name="group" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Group" inverseName="memos" inverseEntity="Group"/>
     </entity>
 </model>

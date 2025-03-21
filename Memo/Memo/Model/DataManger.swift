@@ -28,16 +28,26 @@ class DataManger {
         let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
         request.sortDescriptors = [sortByDateDesc]
         
-        fetchedResults = NSFetchedResultsController(fetchRequest: request, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: "MemoCache")
+        memoFetchedResults = NSFetchedResultsController(fetchRequest: request, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: "MemoCache")
+        
+        let groupRequest = GroupEntity.fetchRequest()
+        let sortByName = NSSortDescriptor(keyPath: \GroupEntity.name, ascending: true)
+        groupRequest.sortDescriptors = [sortByName]
+        
+        groupFetchedResults = NSFetchedResultsController(fetchRequest: groupRequest, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: "MemoGroupCache")
+        
         
         do {
-            try fetchedResults.performFetch()
+            try memoFetchedResults.performFetch()
+            try groupFetchedResults.performFetch()
         } catch {
             print(error)
         }
     }
     
-    let fetchedResults: NSFetchedResultsController<MemoEntity>
+    let memoFetchedResults: NSFetchedResultsController<MemoEntity>
+    let groupFetchedResults: NSFetchedResultsController<GroupEntity>
+    
     let mainContext: NSManagedObjectContext
     
     
@@ -110,6 +120,30 @@ class DataManger {
                     print("Batch Insert 실패")
                 }
             }
+            
+            let groupList: [[String: Any]] = [
+                ["name": "일상"],
+                ["name": "업무"],
+                ["name": "공부"],
+                ["name": "쇼핑"],
+                ["name": "기타"]
+            ]
+            
+            let groupInsertRequest = NSBatchInsertRequest(entityName: "Group", objects: groupList)
+            
+            if let result = try mainContext.execute(groupInsertRequest) as? NSBatchInsertResult,
+               let succeeded = result.result as? Bool {
+                if succeeded {
+                    print("Group Batch Insert 성공")
+                } else {
+                    print("Group Batch Insert 실패")
+                }
+            }
+            
+            try groupFetchedResults.performFetch()
+            try memoFetchedResults.performFetch()
+            
+            
         } catch {
             print(error)
         }
@@ -120,14 +154,14 @@ class DataManger {
     func fetch(keyword: String? = nil) {
         if let keyword {
             let predicate = NSPredicate(format: "%K CONTAINS [c] %@", #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
-            fetchedResults.fetchRequest.predicate = predicate
+            memoFetchedResults.fetchRequest.predicate = predicate
         } else {
-            fetchedResults.fetchRequest.predicate = nil
+            memoFetchedResults.fetchRequest.predicate = nil
         }
         
         
         do {
-            try fetchedResults.performFetch()
+            try memoFetchedResults.performFetch()
         } catch {
             print(error)
         }
@@ -154,7 +188,7 @@ class DataManger {
     }
     
     func delete(at indexPath: IndexPath) {
-        let target = fetchedResults.object(at: indexPath)
+        let target = memoFetchedResults.object(at: indexPath)
         delete(entity: target)
     }
 }

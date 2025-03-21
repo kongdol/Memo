@@ -15,7 +15,7 @@ class ListViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cell = sender as? UITableViewCell, let indexPath = memoTableView.indexPath(for: cell) {
             if let vc = segue.destination as? DetailViewController {
-                vc.memo = DataManger.shared.fetchedResults.object(at: indexPath)
+                vc.memo = DataManger.shared.memoFetchedResults.object(at: indexPath)
             }
         }
         
@@ -44,7 +44,7 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DataManger.shared.fetchedResults.delegate = self
+        DataManger.shared.memoFetchedResults.delegate = self
         setupPullToRefresh()
         
     }
@@ -108,11 +108,11 @@ extension ListViewController: UISearchResultsUpdating {
 
 extension ListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return DataManger.shared.fetchedResults.sections?.count ?? 0
+        return DataManger.shared.memoFetchedResults.sections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = DataManger.shared.fetchedResults.sections else { return 0 }
+        guard let sections = DataManger.shared.memoFetchedResults.sections else { return 0 }
         
         let sectionInfo = sections[section]
         return sectionInfo.numberOfObjects
@@ -121,7 +121,7 @@ extension ListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        let target = DataManger.shared.fetchedResults.object(at: indexPath)
+        let target = DataManger.shared.memoFetchedResults.object(at: indexPath)
         cell.textLabel?.text = target.content
         cell.detailTextLabel?.text = target.dateString
         

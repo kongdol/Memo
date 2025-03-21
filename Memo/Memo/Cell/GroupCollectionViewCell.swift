@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GruopCollectionViewCell: UICollectionViewCell {
+class GroupCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     
 }
