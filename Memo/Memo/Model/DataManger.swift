@@ -28,7 +28,7 @@ class DataManger {
         let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
         request.sortDescriptors = [sortByDateDesc]
         
-        memoFetchedResults = NSFetchedResultsController(fetchRequest: request, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: "MemoCache")
+        memoFetchedResults = NSFetchedResultsController(fetchRequest: request, managedObjectContext: mainContext, sectionNameKeyPath: nil, cacheName: nil)
         
         let groupRequest = GroupEntity.fetchRequest()
         let sortByName = NSSortDescriptor(keyPath: \GroupEntity.name, ascending: true)
@@ -151,12 +151,25 @@ class DataManger {
     }
     
     // 코어데이터에 메모데이터를 주세요!라고 요청하는것
-    func fetch(keyword: String? = nil) {
-        if let keyword {
-            let predicate = NSPredicate(format: "%K CONTAINS [c] %@", #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
-            memoFetchedResults.fetchRequest.predicate = predicate
+    func fetch(group: GroupEntity?, keyword: String? = nil) {
+        memoFetchedResults.fetchRequest.predicate = nil
+        
+        if let group {
+            if let keyword {
+                let predicate = NSPredicate(format: "%K == %@ AND %K CONTAINS [c] %@", #keyPath(MemoEntity.group), group, #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
+                memoFetchedResults.fetchRequest.predicate = predicate
+            } else {
+                let predicate = NSPredicate(format: "%K == %@", #keyPath(MemoEntity.group), group)
+                memoFetchedResults.fetchRequest.predicate = predicate
+            }
         } else {
-            memoFetchedResults.fetchRequest.predicate = nil
+            if let keyword {
+                let predicate = NSPredicate(format: "%K == NIL AND %K CONTAINS [c] %@", #keyPath(MemoEntity.group), #keyPath(MemoEntity.content), keyword) // [c] 대소문자구분x
+                memoFetchedResults.fetchRequest.predicate = predicate
+            } else {
+                let predicate = NSPredicate(format: "%K == NIL", #keyPath(MemoEntity.group))
+                memoFetchedResults.fetchRequest.predicate = predicate
+            }
         }
         
         

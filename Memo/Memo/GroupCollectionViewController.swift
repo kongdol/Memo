@@ -37,7 +37,18 @@ class GroupCollectionViewController: UICollectionViewController {
     }
 
 
-
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) {
+            
+            if let sections = DataManger.shared.groupFetchedResults.sections, sections[indexPath.section].numberOfObjects > indexPath.item {
+                if let vc = segue.destination as? ListViewController {
+                    vc.group = DataManger.shared.groupFetchedResults.object(at: indexPath)
+                }
+            }
+        }
+    }
+    
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -49,14 +60,20 @@ class GroupCollectionViewController: UICollectionViewController {
         guard let sections = DataManger.shared.groupFetchedResults.sections else { return 0 }
         
         let sectionInfo = sections[section]
-        return sectionInfo.numberOfObjects
+        return sectionInfo.numberOfObjects + 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: GroupCollectionViewCell.self), for: indexPath) as! GroupCollectionViewCell
-
-        let target = DataManger.shared.groupFetchedResults.object(at: indexPath)
-        cell.nameLabel.text = target.name
+        
+        if let sections = DataManger.shared.groupFetchedResults.sections, sections[indexPath.section].numberOfObjects == indexPath.item {
+            cell.nameLabel.text = "그룹 없음"
+            cell.contentView.backgroundColor = .tertiarySystemFill
+        } else {
+            let target = DataManger.shared.groupFetchedResults.object(at: indexPath)
+            cell.nameLabel.text = target.name
+            cell.contentView.backgroundColor = .yellow
+        }
         
         return cell
     }
@@ -104,7 +121,7 @@ extension GroupCollectionViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<any NSFetchRequestResult>) {
         collectionView.performBatchUpdates { [weak self] in
             self?.updates.forEach{ $0() }
-        } completion: { [weak self] _ in
+        } completion: { [weak self] _ in // 실행이 끝나면 배열 초기화
             self?.updates.removeAll()
         }
     }

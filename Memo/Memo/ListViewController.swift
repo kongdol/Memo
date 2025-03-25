@@ -11,6 +11,7 @@ import CoreData
 class ListViewController: UIViewController {
     
     @IBOutlet weak var memoTableView: UITableView!
+    var group: GroupEntity?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cell = sender as? UITableViewCell, let indexPath = memoTableView.indexPath(for: cell) {
@@ -30,7 +31,7 @@ class ListViewController: UIViewController {
 
     @objc func resetCache() {
         NSFetchedResultsController<MemoEntity>.deleteCache(withName: nil)
-        DataManger.shared.fetch()
+        DataManger.shared.fetch(group: group)
         memoTableView.refreshControl?.endRefreshing()
         
     }
@@ -46,6 +47,9 @@ class ListViewController: UIViewController {
         
         DataManger.shared.memoFetchedResults.delegate = self
         setupPullToRefresh()
+        
+        DataManger.shared.fetch(group: group)
+        navigationItem.title = group?.name ?? "그룹 없음"
         
     }
  
@@ -98,10 +102,10 @@ extension ListViewController: UISearchResultsUpdating {
         }
         
         guard let keyword = searchController.searchBar.text, keyword.count > 0 else {
-            DataManger.shared.fetch()
+            DataManger.shared.fetch(group: group)
             return
         }
-        DataManger.shared.fetch(keyword: keyword)
+        DataManger.shared.fetch(group: group, keyword: keyword)
     }
 }
 
@@ -136,8 +140,7 @@ extension ListViewController: UITableViewDataSource {
     }
     
     
-}
-
+}  
 extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
