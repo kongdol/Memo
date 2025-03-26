@@ -51,7 +51,7 @@ class ListViewController: UIViewController {
         setupPullToRefresh()
         
         DataManger.shared.fetch(group: group)
-        navigationItem.title = group?.name ?? "그룹 없음"
+        navigationItem.title = group?.title ?? "그룹 없음"
         
     }
  

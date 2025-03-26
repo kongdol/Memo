@@ -72,9 +72,13 @@ class GroupCollectionViewController: UICollectionViewController {
             cell.contentView.backgroundColor = .tertiarySystemFill
         } else {
             let target = DataManger.shared.groupFetchedResults.object(at: indexPath)
-            cell.nameLabel.text = target.name
+            cell.nameLabel.text = target.title
             cell.contentView.backgroundColor = .yellow
+            
+            print(target.memoCount)
         }
+        
+        
         
         return cell
     }

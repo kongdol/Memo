@@ -28,6 +28,8 @@ class ComposeViewController: UIViewController {
             return
         }
         
+        group?.lastUpdated = .now
+        
         if let editTarget {
             DataManger.shared.update(entity: editTarget, with: text)
             
