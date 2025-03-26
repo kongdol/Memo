@@ -24,7 +24,7 @@ class DataManger {
         persistentContainer = container
         mainContext = persistentContainer.viewContext
         
-        let request = MemoEntity.fetchRequest()
+        let request = MemoEntity.fetchRequest() // 데이터가져오겠다는요청생성
         let sortByDateDesc = NSSortDescriptor(keyPath: \MemoEntity.insertDate, ascending: false)
         request.sortDescriptors = [sortByDateDesc]
         
@@ -68,6 +68,8 @@ class DataManger {
             }
         }
     }
+    
+
     
     func insertDummyData() {
 #if DEBUG
@@ -174,17 +176,19 @@ class DataManger {
         
         
         do {
+            // NSFetchedResultsController와 함께 쓰는 경우
             try memoFetchedResults.performFetch()
         } catch {
             print(error)
         }
     }
     
-    func insert(memo: String) {
+    func insert(memo: String, to group: GroupEntity?) {
         let newMemo = MemoEntity(context: mainContext)
         
         newMemo.content = memo
         newMemo.insertDate = .now
+        newMemo.group = group
         
         saveContext()
     }

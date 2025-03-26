@@ -9,8 +9,10 @@ import UIKit
 
 class ComposeViewController: UIViewController {
 
+    
     // 있으면 편집, nil이면 추가
     var editTarget: MemoEntity?
+    var group: GroupEntity?
     var originalContent = ""
     
     @IBOutlet weak var contentTextView: UITextView!
@@ -30,7 +32,7 @@ class ComposeViewController: UIViewController {
             DataManger.shared.update(entity: editTarget, with: text)
             
         } else {
-            DataManger.shared.insert(memo: text)
+            DataManger.shared.insert(memo: text, to: group)
         }
         
         dismiss(animated: true)

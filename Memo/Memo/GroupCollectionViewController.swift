@@ -39,8 +39,9 @@ class GroupCollectionViewController: UICollectionViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) {
-            
+            // 원래 그룹선택했는지 확인
             if let sections = DataManger.shared.groupFetchedResults.sections, sections[indexPath.section].numberOfObjects > indexPath.item {
+                
                 if let vc = segue.destination as? ListViewController {
                     vc.group = DataManger.shared.groupFetchedResults.object(at: indexPath)
                 }
@@ -97,7 +98,7 @@ extension GroupCollectionViewController: NSFetchedResultsControllerDelegate {
                 updates.append({ [weak self] in
                     self?.collectionView.deleteItems(at: [deleteIndexPath])
                 })
-            }
+            } 
         case .move:
             if let origianlIndexPath = indexPath, let targetIndexPath = newIndexPath {
                 updates.append({ [weak self] in

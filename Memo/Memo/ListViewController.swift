@@ -18,6 +18,8 @@ class ListViewController: UIViewController {
             if let vc = segue.destination as? DetailViewController {
                 vc.memo = DataManger.shared.memoFetchedResults.object(at: indexPath)
             }
+        } else if let vc = segue.destination.children.first as? ComposeViewController {
+            vc.group = group
         }
         
     }
