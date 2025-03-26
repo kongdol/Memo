@@ -12,6 +12,9 @@ class DataManger {
     // 타입프로퍼티로 쉽게 접근가능, 인스턴스 하나 만들어짐
     static let shared = DataManger()
     
+    var ungroupedMemoCount = 0
+    var ungroupedLastUpdate: Date?
+    
     // 클래스밖에서 생성자를 호출 못함
     private init() {
         let container = NSPersistentContainer(name: "Memo")
@@ -43,6 +46,8 @@ class DataManger {
         } catch {
             print(error)
         }
+        
+        updateUngroupedInfo()
     }
     
     let memoFetchedResults: NSFetchedResultsController<MemoEntity>
@@ -67,6 +72,8 @@ class DataManger {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+        
+        updateUngroupedInfo()
     }
     
 
@@ -208,4 +215,22 @@ class DataManger {
         let target = memoFetchedResults.object(at: indexPath)
         delete(entity: target)
     }
+    
+    
+    func updateUngroupedInfo() {
+        let request = MemoEntity.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == NIL", #keyPath(MemoEntity.group))
+        
+        do {
+            ungroupedMemoCount = try mainContext.count(for: request)
+        } catch {
+            print(error)
+        }
+        
+        NotificationCenter.default.post(name: .ungroupedInfoDidUpdate, object: nil)
+    }
+}
+
+extension Notification.Name {
+    static let ungroupedInfoDidUpdate = Notification.Name("ungroupedInfoDidUpdate")
 }

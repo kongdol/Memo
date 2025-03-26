@@ -154,17 +154,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="62e-WO-upN">
-                            <size key="itemSize" width="312" height="345"/>
+                            <size key="itemSize" width="312" height="192"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GroupCollectionViewCell" id="brW-K6-L2a" customClass="GroupCollectionViewCell" customModule="Memo" customModuleProvider="target">
-                                <rect key="frame" x="40.666666666666664" y="0.0" width="312" height="345"/>
+                                <rect key="frame" x="40.666666666666664" y="0.0" width="312" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="wIG-AF-2xc">
-                                    <rect key="frame" x="0.0" y="0.0" width="312" height="345"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="312" height="200"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcs-Ni-35Z">
@@ -173,15 +173,36 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4yc-Ov-mBl">
+                                            <rect key="frame" x="30" y="59" width="252" height="16"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4iz-IA-AlS">
+                                            <rect key="frame" x="30" y="124" width="252" height="60"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="4iz-IA-AlS" secondAttribute="trailing" constant="30" id="BnO-xl-f8g"/>
                                         <constraint firstAttribute="trailing" secondItem="zcs-Ni-35Z" secondAttribute="trailing" constant="30" id="E9c-mE-fqa"/>
                                         <constraint firstItem="zcs-Ni-35Z" firstAttribute="top" secondItem="wIG-AF-2xc" secondAttribute="top" constant="30" id="HbK-p0-A3a"/>
+                                        <constraint firstItem="4yc-Ov-mBl" firstAttribute="leading" secondItem="zcs-Ni-35Z" secondAttribute="leading" id="IyA-2D-vc3"/>
+                                        <constraint firstItem="4yc-Ov-mBl" firstAttribute="trailing" secondItem="zcs-Ni-35Z" secondAttribute="trailing" id="MOn-zS-ovi"/>
+                                        <constraint firstItem="4iz-IA-AlS" firstAttribute="top" relation="greaterThanOrEqual" secondItem="4yc-Ov-mBl" secondAttribute="bottom" constant="35" id="N2w-UI-bI9"/>
+                                        <constraint firstItem="4yc-Ov-mBl" firstAttribute="top" secondItem="zcs-Ni-35Z" secondAttribute="bottom" constant="8" symbolic="YES" id="Ovs-Ss-IXf"/>
                                         <constraint firstItem="zcs-Ni-35Z" firstAttribute="leading" secondItem="wIG-AF-2xc" secondAttribute="leading" constant="30" id="gqq-PK-D5u"/>
+                                        <constraint firstAttribute="bottom" secondItem="4iz-IA-AlS" secondAttribute="bottom" constant="16" id="x9J-1X-j1r"/>
+                                        <constraint firstItem="4iz-IA-AlS" firstAttribute="leading" secondItem="wIG-AF-2xc" secondAttribute="leading" constant="30" id="xsP-OX-arN"/>
                                     </constraints>
                                 </collectionViewCellContentView>
-                                <size key="customSize" width="312" height="345"/>
+                                <size key="customSize" width="312" height="200"/>
                                 <connections>
+                                    <outlet property="lastUpdateDateLabel" destination="4yc-Ov-mBl" id="NCh-gJ-2IF"/>
+                                    <outlet property="memoCountLabel" destination="4iz-IA-AlS" id="r0e-kd-eXe"/>
                                     <outlet property="nameLabel" destination="zcs-Ni-35Z" id="TmX-wg-Rbz"/>
                                     <segue destination="BYZ-38-t0r" kind="show" id="FuE-Qx-xDA"/>
                                 </connections>
