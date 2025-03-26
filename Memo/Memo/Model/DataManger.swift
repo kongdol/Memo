@@ -13,7 +13,14 @@ class DataManger {
     static let shared = DataManger()
     
     var ungroupedMemoCount = 0
-    var ungroupedLastUpdate: Date?
+    var ungroupedLastUpdate: Date? {
+        get {
+            UserDefaults.standard.object(forKey: "ungroupedLastUpdate") as? Date
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "ungroupedLastUpdate")
+        }
+    }
     
     // 클래스밖에서 생성자를 호출 못함
     private init() {
